@@ -4,11 +4,10 @@ package com.hy.daily.controller.work;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.hy.daily.entity.work.WorkRecord;
 import com.hy.daily.service.work.IWorkRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -26,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/work")
+@Slf4j
 public class WorkRecordController {
 
     @Autowired
@@ -40,6 +40,7 @@ public class WorkRecordController {
         WorkRecord workRecord = queryRecord();
         Map<String, Object> result = new HashMap<>();
         result.put("result", workRecord);
+        log.warn("record is [" + workRecord +"]");
         return result;
     }
 
@@ -58,6 +59,7 @@ public class WorkRecordController {
         workRecordService.save(workRecord);
         Map<String, Object> result = new HashMap<>();
         result.put("result", workRecord);
+        log.warn("上班！");
         return result;
     }
 
@@ -66,6 +68,7 @@ public class WorkRecordController {
         workRecordService.update(Wrappers.<WorkRecord>lambdaUpdate().set(WorkRecord::getOffWork,LocalDateTime.now()).eq(WorkRecord::getId, id));
         Map<String, Object> result = new HashMap<>();
         result.put("result", workRecordService.getById(id));
+        log.warn("下班！");
         return result;
     }
 }
